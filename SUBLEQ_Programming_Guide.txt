@@ -1,0 +1,89 @@
+/&
+	Description: Quick Guide in SUBLEQ Programming
+	Author: Charles Carandang
+&/
+//SUBLEQ Pseudocode:
+	void SUBLEQ(int16 *A, int16 *B, int16 C){
+		&A = &A - &B;
+		if(&A - &B <= 0)
+			goto C;
+	}
+
+//SUBLEQ Memory Mapping:
+	ADDDRESS		DATA_CONTENT
+	x				B			
+	x+1				A
+	x+2				C
+
+//SUBLEQ Example Code:
+	
+	> A = 0;
+		> x0:	SUBLEQ(&A, &A, x1);	//x1 = Address of the next instruction to be executed
+	
+	> goto x;
+		> x0:	SUBLEQ(&Z,&Z,x1);	//Z = arbitrary scratchpad location
+	
+	> A = y;
+		> x0:	SUBLEQ(&Z,&Z,x1);	//Z = arbitrary scratchpad location
+		> x1:	SUBLEQ(&A,&A,x2);
+		> x2:	SUBLEQ(&Z,&y,x3);
+		> x3:	SUBLEQ(&A,&Z,x4);	//x4 = Address of the next instruction to be executed
+		
+	> A += y;
+		> x0:	SUBLEQ(&Z,&Z,x1);	//Z = arbitrary scratchpad location
+		> x1:	SUBLEQ(&B,&y,x1);
+		> x2:	SUBLEQ(&A,&Z,x2);	//x3 = Address of the next instruction to be executed
+		
+	> A -= y:
+		> x0:	SUBLEQ(&A,&y,x1);	//x1 = Address of the next instruction to be executed
+		
+	> C = A + B:
+		> x0:	SUBLEQ(&Z,&Z,x1);	//Z = arbitrary scratchpad location
+		> x1:	SUBLEQ(&C,&C,x2);
+		> x2:	SUBLEQ(&Z,&A,x3);
+		> x3:	SUBLEQ(&C,&Z,x4);	// C = A
+		> x4:	SUBLEQ(&Z,&Z,x5);	
+		> x5:	SUBLEQ(&Z,&B,x6);
+		> x6:	SUBLEQ(&C,&Z,x7);	//x7 = Address of the next instruction to be executed
+		
+	> C = A - B;
+		> x0:	SUBLEQ(&Z,&Z,x1);	//Z = arbitrary scratchpad location
+		> x1:	SUBLEQ(&C,&C,x2);
+		> x2:	SUBLEQ(&Z,&A,x3);
+		> x3:	SUBLEQ(&C,&Z,x4);	// C = A
+		> x4:	SUBLEQ(&C,&B,x5);	//x5 = Address of the next instruction to be executed
+		
+	> A = A * B
+		> x0:	SUBLEQ(&Z,&Z,x1);	//Z = arbitrary scratchpad location
+		> x1:	SUBLEQ(&Y,&Y,x2);	//Y = arbitrary scratchpad location
+		> x2:	SUBLEQ(&W,&W,x3);	//W = arbitrary scratchpad location
+		> x3:	SUBLEQ(&Y,&A,x4);	//Y = -A
+		> x4:	SUBLEQ(&A,&A,x5);	//A = 0
+		> x5:	SUBLEQ(&Z,&B,x6);
+		> x6:	SUBLEQ(&W,&Z,x7);	//W = B
+		> x7:	SUBLEQ(&A,&Y,x8);	//A = A - Y
+		> x8:	SUBLEQ(&W,&k1,x10);	//k1 = location for "1" constant; x10 = Address of the next instruction to be executed once multiplication is done
+		> x9:	SUBLEQ(&Z,&Z,x7);
+	
+	> A = A / B (Integer Division)
+		> x0:	SUBLEQ(&Z,&Z,x1);	//Z = arbitrary scratchpad location
+		> x1:	SUBLEQ(&Y,&Y,x2);	//Y = arbitrary scratchpad location
+		> x2:	SUBLEQ(&W,&W,x3);	//W = arbitrary scratchpad location
+		> x3:	SUBLEQ(&W,&k1,x4);	//k1 = location for "1" constant; W = -1
+		> x4:	SUBLEQ(&Z,&A,x5);
+		> x5:	SUBLEQ(&Y,&Z,x6);	//Y = A
+		> x6:	SUBLEQ(&A,&A,x7);	//A = 0
+		> x7:	SUBLEQ(&Y,&B,x10);	//x10 = Address of the next instruction to be executed once division is done
+		> x8:	SUBLEQ(&A,&W,x7);
+		> x9:	SUBLEQ(&Z,&Z,x7);
+	> A = A << B
+		> x0:	SUBLEQ(&Z,&Z,x1);	//Z = arbitrary scratchpad location
+		> x1:	SUBLEQ(&Y,&Y,x2);	//Y = arbitrary scratchpad location
+		> x2:	SUBLEQ(&W,&W,x3);	//W = arbitrary scratchpad location
+		> x3:	SUBLEQ(&Z,&k1,x4);
+		> x4:	SUBLEQ(&W,&Z,x5);	//W = 1
+		> x5:	SUBLEQ(&Z,&Z,x6);
+		> x6:	SUBLEQ(&Z,&B,x7);
+		> x7:	SUBLEQ(&Y,&Z,x8);	//Y = B 
+		
+		
