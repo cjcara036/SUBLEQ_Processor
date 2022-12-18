@@ -1,0 +1,181 @@
+/*
+	Description: Control Unit Microcode for SUBLEQ Processor 
+	Version History:
+	0.01	- Initial SUBLEQ Microcode
+*/
+
+//Get Content for Register B
+@00					//00000_00					//STATE_0: Dump PC content to BUS
+00001_00000_00001
+@01					
+00001_00000_00001
+@02					
+00001_00000_00001
+@03					
+00001_00000_00001
+
+@04					//00001_00					//STATE_1: Store BUS content to MAR
+00010_00010_00001
+@05					
+00010_00010_00001
+@06					
+00010_00010_00001
+@07					
+00010_00010_00001
+
+@08					//00010_00					//STATE_2: Wait Data from memory, then connect data to BUS once available
+00010_00000_00000
+@09					
+00010_00000_00000
+@0A					
+00011_10000_00000
+@0B					
+00011_10000_00000
+
+@0C					//00011_00					//STATE_3: Store BUS content to MAR
+00100_10010_00000
+@0D
+00100_10010_00000
+@0E
+00100_10010_00000
+@0F
+00100_10010_00000
+
+@10					//00100_00					//STATE_4: Wait Data from memory, then connect data to BUS once available
+00100_00000_00000
+@11
+00100_00000_00000
+@12
+00101_10000_00000
+@13
+00101_10000_00000
+
+@14					//00101_00					//STATE_5: Store BUS data to Register B while incrementing PC
+00110_10000_10100
+@15
+00110_10000_10100
+@16
+00110_10000_10100
+@17
+00110_10000_10100
+
+//Get Content of Register A
+@18					//00110_00					//STATE_6: Dump PC content to BUS
+00111_00000_00001
+@19					
+00111_00000_00001
+@1A					
+00111_00000_00001
+@1B					
+00111_00000_00001
+
+@1C					//00111_00					//STATE_7: Store BUS content to MAR
+01000_00010_00001
+@1D					
+01000_00010_00001
+@1E					
+01000_00010_00001
+@1F					
+01000_00010_00001
+
+@20					//01000_00					//STATE_8: Wait Data from memory, then connect data to BUS once available
+01000_00000_00000
+@21					
+01000_00000_00000
+@22					
+01001_10000_00000
+@23					
+01001_10000_00000
+
+@24					//01001_00					//STATE_9: Store BUS content to MAR
+01010_10010_00000
+@25
+01010_10010_00000
+@26
+01010_10010_00000
+@27
+01010_10010_00000
+
+@28					//01010_00					//STATE_A: Wait Data from memory, then connect data to BUS once available
+01010_00000_00000
+@29
+01010_00000_00000
+@2A
+01011_10000_00000
+@2B
+01011_10000_00000
+
+@2C					//01011_00					//STATE_B: Store BUS data to Register A
+01100_10001_00000
+@2D
+01100_10001_00000
+@2E
+01100_10001_00000
+@2F
+01100_10001_00000
+
+//Save Computation Result to location of Register A
+@30					//01100_00					//STATE_C: Dump ALU content to BUS
+01101_00000_01000
+@31
+01101_00000_01000
+@32
+01101_00000_01000
+@33
+01101_00000_01000
+
+@34					//01101_00					//STATE_D: Store BUS value to output buffer
+01110_00100_01000
+@35
+01110_00100_01000
+@36
+01110_00100_01000
+@37
+01110_00100_01000
+
+@38					//01110_00 					//STATE_E: Wait for Data to be fully written in memory
+01110_01000_00000
+@39
+01110_01000_00000
+@3A
+01111_01000_00100
+@3B
+01111_01000_00100
+
+//LEQ Condition Check
+@3C					//01111_00 					//STATE_F: Conditional Branch
+00000_00000_00100
+@3D
+10000_00000_00001
+@3E
+00000_00000_00100
+@3F
+10000_00000_00001
+
+//Get New Address if LEQ Condition is met
+@40					//10000_00					//STATE_10: Store BUS value to MAR
+10001_00010_00001
+@41
+10001_00010_00001
+@42
+10001_00010_00001
+@43
+10001_00010_00001
+
+@44					//10001_00 					//STATE_11: Wait for Data from memory, then connect to BUS once data is available
+10001_00000_00000
+@45
+10001_00000_00000
+@46
+10010_10000_00000
+@47
+10010_10000_00000
+
+@48					//10010_00 					//STATE_12: Store BUS data to PC
+00000_10000_00010
+@49
+00000_10000_00010
+@4A
+00000_10000_00010
+@4B
+00000_10000_00010
